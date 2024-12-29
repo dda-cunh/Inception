@@ -1,11 +1,10 @@
-FROM debian:bullseye
+FROM	debian:bullseye
 
-RUN apt-get update -y \
-	&& apt-get upgrade -y
+RUN		apt-get update -y \
+		&& apt-get upgrade -y
 
+COPY	./config/script.sh /service/
 
-COPY ./config/script.sh /app/
+WORKDIR	/service
 
-WORKDIR /app
-
-CMD ["bash", "script.sh"]
+CMD		[ "bash", "script.sh" ]

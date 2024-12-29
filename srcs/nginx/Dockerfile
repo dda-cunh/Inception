@@ -32,6 +32,4 @@ RUN		echo "\
 			}\
 			" > /etc/nginx/nginx.conf
 
-WORKDIR	/service
-
 CMD		[ "nginx", "-g", "daemon off;" ]

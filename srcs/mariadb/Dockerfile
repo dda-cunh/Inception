@@ -1,11 +1,13 @@
-FROM debian:bullseye
+FROM	debian:bullseye
 
-RUN apt-get update -y \
-	&& apt-get upgrade -y \
-	&& apt-get install -y mariadb-server
+RUN		apt-get update -y \
+		&& apt-get upgrade -y \
+		&& apt-get install -y \
+			mariadb-server \
+		&& apt-get clean
 
-COPY ./config/script.sh /app/
+WORKDIR	/service
 
-WORKDIR /app
+COPY	./config/script.sh ./
 
-CMD ["bash", "script.sh"]
+CMD 	[ "bash", "script.sh" ]
