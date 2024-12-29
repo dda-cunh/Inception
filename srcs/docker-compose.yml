@@ -1,6 +1,7 @@
 services:
   nginx:
     container_name: nginx
+    image: nginx
     env_file: ".env"
     build: ./nginx
     ports:

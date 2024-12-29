@@ -11,10 +11,27 @@ RUN		apt-get update -y \
 			-newkey rsa:2048 \
 			-keyout /etc/nginx/ssl/ssl.key \
 			-out /etc/nginx/ssl/ssl.crt \
-			-subj "/C=PT/ST=Lisbon/L=Lisbon/O=42Lisboa/OU=Student/CN=dda-cunh@student.42lisboa.com/UID=dda-cunh"
+			-subj "/C=PT/ST=Lisbon/L=Lisbon/O=42Lisboa/OU=Student/CN=dda-cunh.42.fr/UID=dda-cunh"
+
+RUN		echo "\
+			events {}\
+			http\
+			{\
+				server\
+				{\
+					listen 443 ssl;\
+					server_name dda-cunh.42.fr;\
+			\
+					ssl_certificate_key /etc/nginx/ssl/ssl.key;\
+					ssl_certificate /etc/nginx/ssl/ssl.crt;\
+					ssl_protocols TLSv1.3;\
+			\
+					root /usr/share/nginx/html;\
+					index index.html;\
+				}\
+			}\
+			" > /etc/nginx/nginx.conf
 
 WORKDIR	/service
-
-COPY	./config/nginx.conf /etc/nginx/
 
 CMD		[ "nginx", "-g", "daemon off;" ]
