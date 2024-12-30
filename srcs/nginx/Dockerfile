@@ -26,8 +26,14 @@ RUN		echo "\
 					ssl_certificate /etc/nginx/ssl/ssl.crt;\
 					ssl_protocols TLSv1.3;\
 			\
-					root /usr/share/nginx/html;\
+					root /var/www/wordpress;\
 					index index.html;\
+			\
+					location ~ \.php$\
+					{\
+						include snippets/fastcgi-php.conf;\
+						fastcgi_pass wordpress:9000;\
+					}\
 				}\
 			}\
 			" > /etc/nginx/nginx.conf

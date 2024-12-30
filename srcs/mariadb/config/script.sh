@@ -1,7 +1,6 @@
 #!/bin/bash
 
-if ! [ -f /service/.mysql_is_setup ]; then
-
+if [ ! -f /service/.mysql_is_setup ]; then
 	service mariadb start
 
 	mysql -u root -e "
@@ -19,4 +18,4 @@ if ! [ -f /service/.mysql_is_setup ]; then
 	touch /service/.mysql_is_setup
 fi
 
-mysqld_safe
+mysqld_safe --bind-address=0.0.0.0

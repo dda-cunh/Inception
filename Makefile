@@ -17,6 +17,8 @@ logs:
 down:
 			${COMPOSE} down
 
+re:			fclean up
+
 clean:
 			${COMPOSE} down --rmi all
 

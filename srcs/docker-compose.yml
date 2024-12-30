@@ -1,3 +1,7 @@
+x-common-conf: &common
+  env_file: ".env"
+  restart: on-failure
+
 services:
   nginx:
     container_name: nginx
@@ -5,12 +9,20 @@ services:
     build: ./nginx
     ports:
       - "443:443"
-    env_file: ".env"
-    restart: on-failure
+    <<: *common
 
   mariadb:
     container_name: mariadb
     image: mariadb
     build: ./mariadb
-    env_file: ".env"
-    restart: on-failure
+    <<: *common
+
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    build: ./wordpress
+    depends_on:
+      - mariadb
+      - nginx
+    <<: *common
+
