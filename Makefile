@@ -5,7 +5,18 @@ COMPOSE_FILE_PATH	=	./srcs/docker-compose.yml
 
 COMPOSE				=	${DOCKER_COMPOSE} -f ${COMPOSE_FILE_PATH}
 
-up:	
+PERSIST_DIR			=	${HOME}/data
+
+up:
+			if [ ! -d ${PERSIST_DIR} ]; then \
+				mkdir -p ${PERSIST_DIR}; \
+			fi
+			if [ ! -d ${PERSIST_DIR}/mariadb ]; then \
+				mkdir -p ${PERSIST_DIR}/mariadb; \
+			fi
+			if [ ! -d ${PERSIST_DIR}/wordpress ]; then \
+				mkdir -p ${PERSIST_DIR}/wordpress; \
+			fi
 			${COMPOSE} up -d --build
 
 no_cache:	fclean
@@ -23,4 +34,7 @@ clean:
 			${COMPOSE} down --rmi all
 
 fclean:
-			${COMPOSE} down --rmi all  --volumes
+			${COMPOSE} down --rmi all --volumes --remove-orphans
+			${COMPOSE} rm -f -s -v  # forcefully removes all stopped services and volumes
+			sudo rm -rf ${PERSIST_DIR}
+			docker system prune -f

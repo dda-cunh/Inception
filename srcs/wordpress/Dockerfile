@@ -5,6 +5,7 @@ RUN		apt-get update -y \
 		&& apt-get install -y \
 			curl \
 			php-fpm \
+			php-mysql \
 		&& apt-get clean \
 		&& mkdir -p /var/www/html/
 

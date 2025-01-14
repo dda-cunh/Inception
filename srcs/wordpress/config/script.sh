@@ -1,12 +1,26 @@
 #!/bin/bash
 
-tar_file="latest.tar.gz"
+wp_archive="latest.tar.gz"
+wp_is_setup="/service/.wp_is_setup"
+conf_log="/tmp/conf.log"
 
-if [ ! -d /var/www/html/wordpress ]; then
-	curl -s https://wordpress.org/$tar_file --output $tar_file
-	tar -xvf $tar_file > /dev/null
-	mv wordpress /var/www/html/
-	rm -rf $tar_file
+function log()
+{
+	echo $1 >> $conf_log
+}
+
+if [ ! -f $wp_is_setup ]; then
+	mkdir -p $WP_PATH
+	curl -s https://wordpress.org/$wp_archive --output $wp_archive
+	tar -xvf $wp_archive >> $conf_log
+	rm -rf $wp_archive
+	mv wordpress/* $WP_PATH
+	cd $WP_PATH
+	cp wp-config-sample.php wp-config.php
+	sed -i "s|database_name_here|$MYSQL_DB|g" wp-config.php
+	sed -i "s|username_here|$MYSQL_USER|g" wp-config.php
+	sed -i "s|password_here|$MYSQL_PASS|g" wp-config.php
+	touch $wp_is_setup
 fi
 
 if [ ! -d /run/php/ ]; then
