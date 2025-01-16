@@ -9,20 +9,20 @@ services:
     container_name: nginx
     image: nginx
     build: ./nginx
-    ports:
-      - "443:443"
     volumes:
       - wordpress:/var/www/wordpress
+    ports:
+      - "443:443"
     <<: *common
 
   mariadb:
     container_name: mariadb
     image: mariadb
     build: ./mariadb
-    expose:
-      - 3306
     volumes:
       - mariadb:/var/lib/mysql
+    expose:
+      - 3306
     <<: *common
 
   wordpress:

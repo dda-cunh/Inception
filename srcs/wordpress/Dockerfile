@@ -11,6 +11,6 @@ RUN		apt-get update -y \
 
 WORKDIR	/service
 
-COPY	./config/script.sh ./
+COPY	./config/* ./
 
 CMD		[ "bash", "script.sh" ]

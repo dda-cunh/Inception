@@ -18,6 +18,7 @@ up:
 				mkdir -p ${PERSIST_DIR}/wordpress; \
 			fi
 			${COMPOSE} up -d --build
+			make logs
 
 no_cache:	fclean
 			${COMPOSE} build --no-cache
@@ -35,6 +36,6 @@ clean:
 
 fclean:
 			${COMPOSE} down --rmi all --volumes --remove-orphans
-			${COMPOSE} rm -f -s -v  # forcefully removes all stopped services and volumes
-			sudo rm -rf ${PERSIST_DIR}
+			${COMPOSE} rm -f -s -v
 			docker system prune -f
+			sudo rm -rf ${PERSIST_DIR}
