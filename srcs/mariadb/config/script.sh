@@ -12,8 +12,9 @@ if [ ! -f /service/.mysql_is_setup ]; then
 					CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASS}';
 					GRANT ALL PRIVILEGES ON ${MYSQL_DB}.* TO '${MYSQL_USER}'@'%';
 					FLUSH PRIVILEGES;
-					SHUTDOWN;
 				"
+
+	service mariadb stop
 
 	touch /service/.mysql_is_setup
 fi

@@ -5,24 +5,12 @@ x-common-conf: &common
   restart: on-failure
 
 services:
-  nginx:
-    container_name: nginx
-    image: nginx
-    build: ./nginx
-    volumes:
-      - wordpress:/var/www/wordpress
-    ports:
-      - "443:443"
-    <<: *common
-
   mariadb:
     container_name: mariadb
     image: mariadb
     build: ./mariadb
     volumes:
       - mariadb:/var/lib/mysql
-    expose:
-      - 3306
     <<: *common
 
   wordpress:
@@ -31,11 +19,20 @@ services:
     build: ./wordpress
     depends_on:
       - mariadb
-      - nginx
     volumes:
       - wordpress:/var/www/wordpress
-    expose:
-      - 9000
+    <<: *common
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    build: ./nginx
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/wordpress
+    ports:
+      - "443:443"
     <<: *common
 
 volumes:

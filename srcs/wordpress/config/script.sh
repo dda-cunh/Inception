@@ -15,10 +15,10 @@ function check_db()
 	return $?
 }
 
-while check_db; do
-	echo "Database check failed, retrying..."
-	sleep 1
-done
+# while check_db; do
+# 	echo "Database check failed, retrying..."
+# 	sleep 1
+# done
 
 if [ ! -f $wp_is_setup ]; then
 	mkdir -p $WP_PATH

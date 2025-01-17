@@ -7,7 +7,15 @@ COMPOSE				=	${DOCKER_COMPOSE} -f ${COMPOSE_FILE_PATH}
 
 PERSIST_DIR			=	${HOME}/data
 
-up:
+up:			set_perist
+			${COMPOSE} up -d --build
+			make logs
+
+force_re:	set_perist
+			${COMPOSE} up -d --build --force-recreate
+			make logs
+
+set_perist:
 			if [ ! -d ${PERSIST_DIR} ]; then \
 				mkdir -p ${PERSIST_DIR}; \
 			fi
@@ -17,11 +25,6 @@ up:
 			if [ ! -d ${PERSIST_DIR}/wordpress ]; then \
 				mkdir -p ${PERSIST_DIR}/wordpress; \
 			fi
-			${COMPOSE} up -d --build
-			make logs
-
-no_cache:	fclean
-			${COMPOSE} build --no-cache
 
 logs:
 			${COMPOSE} logs
@@ -37,5 +40,5 @@ clean:
 fclean:
 			${COMPOSE} down --rmi all --volumes --remove-orphans
 			${COMPOSE} rm -f -s -v
-			docker system prune -f
+			docker system prune -fa
 			sudo rm -rf ${PERSIST_DIR}
