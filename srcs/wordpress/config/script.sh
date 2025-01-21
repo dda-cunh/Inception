@@ -1,38 +1,35 @@
 #!/bin/bash
 
-wp_archive="latest.tar.gz"
 wp_is_setup="/service/.wp_is_setup"
-conf_log="/tmp/conf.log"
+wp_bin="/usr/local/bin/wp"
 
-function log()
-{
-	echo $1 >> $conf_log
-}
+if [ ! -f $wp_bin ];
+then
+	curl -s -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+	chmod +x wp-cli.phar
+	mv wp-cli.phar $wp_bin
+fi
 
-function check_db()
-{
-	/usr/bin/php7.4 ./try_db.php
-	return $?
-}
-
-# while check_db; do
-# 	echo "Database check failed, retrying..."
-# 	sleep 1
-# done
-
-if [ ! -f $wp_is_setup ]; then
-	mkdir -p $WP_PATH
-	curl -s https://wordpress.org/$wp_archive --output $wp_archive
-	tar -xvf $wp_archive >> $conf_log
-	rm -rf $wp_archive
-	mv wordpress/* $WP_PATH
-	rm -rf wordpress
+if [ ! -d $wp_is_setup ]; then
 	cd $WP_PATH
-	cp wp-config-sample.php wp-config.php
-	sed -i "s|database_name_here|$MYSQL_DB|g" wp-config.php
-	sed -i "s|username_here|$MYSQL_USER|g" wp-config.php
-	sed -i "s|password_here|$MYSQL_PASS|g" wp-config.php
-	sed -i "s|localhost|$MYSQL_HOST|g" wp-config.php
+	wp core download --allow-root
+	wp config create --allow-root \
+						--dbname=$MYSQL_DB \
+						--dbuser=$MYSQL_UNAME \
+						--dbpass=$MYSQL_UPASS \
+						--dbhost=$WP_MYSQL_HOST
+	wp core install	--allow-root \
+						--url=$WP_URL \
+						--title=$WP_TITLE \
+						--admin_user=$WP_ADMNAME \
+						--admin_password=$WP_ADMPASS \
+						--admin_email=$WP_ADMMAIL
+	wp user create $WP_UNAME $WP_UMAIL --allow-root \
+						--role=$WP_UROLE \
+						--user_pass=$WP_UPASS
+	wp theme install $WP_THEME --allow-root \
+						--activate 
+
 	touch $wp_is_setup
 fi
 

@@ -10,4 +10,4 @@ WORKDIR	/service
 
 COPY	./config/script.sh ./
 
-CMD		[ "bash", "script.sh" ]
+ENTRYPOINT [ "/bin/bash", "script.sh" ]

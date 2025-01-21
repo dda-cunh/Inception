@@ -1,16 +1,15 @@
-FROM	debian:bullseye
+FROM		debian:bullseye
 
-RUN		apt-get update -y \
-		&& apt-get upgrade -y \
-		&& apt-get install -y \
-			curl \
-			php-fpm \
-			php-mysql \
-		&& apt-get clean \
-		&& mkdir -p /var/www/html/
+RUN			apt-get update -y \
+			&& apt-get upgrade -y \
+			&& apt-get install -y \
+				curl \
+				php-fpm \
+				php-mysql \
+			&& apt-get clean
 
-WORKDIR	/service
+WORKDIR		/service
 
-COPY	./config/* ./
+COPY		./config/* ./
 
-CMD		[ "bash", "script.sh" ]
+ENTRYPOINT	[ "bash", "script.sh" ]
