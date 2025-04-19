@@ -24,27 +24,35 @@ networks:
     name: inception
 
 services:
+  mariadb:
+    build: ./mariadb
+    image: mariadb
+    container_name: mariadb
+    volumes:
+      - mariadb:/var/lib/mysql
+    <<: *common
+
+  wordpress:
+    build: ./wordpress
+    image: wordpress
+    container_name: wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress:/var/www/wordpress
+    <<: *common
+
   nginx:
-    container_name: nginx
     build: ./nginx
+    image: nginx
+    container_name: nginx
+    depends_on:
+      - wordpress
     volumes:
       - wordpress:/var/www/wordpress
     ports:
       - "443:443"
     <<: *common
 
-  mariadb:
-    container_name: mariadb
-    build: ./mariadb
-    volumes:
-      - mariadb:/var/lib/mysql
-    <<: *common
 
-  wordpress:
-    container_name: wordpress
-    build: ./wordpress
-    depends_on:
-      - mariadb
-    volumes:
-      - wordpress:/var/www/wordpress
-    <<: *common
+

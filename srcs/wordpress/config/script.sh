@@ -1,6 +1,6 @@
 #!/bin/bash
 
-wp_is_setup="/service/.wp_is_setup"
+wp_is_setup=$WP_PATH/"wp-config.php"
 wp_bin="/usr/local/bin/wp"
 
 if [ ! -f $wp_bin ];
@@ -24,13 +24,12 @@ if [ ! -d $wp_is_setup ]; then
 						--admin_user=$WP_ADMNAME \
 						--admin_password=$WP_ADMPASS \
 						--admin_email=$WP_ADMMAIL
-	wp user create $WP_UNAME $WP_UMAIL --allow-root \
+	wp user create --allow-root \
+						$WP_UNAME $WP_UMAIL  \
 						--role=$WP_UROLE \
 						--user_pass=$WP_UPASS
 	wp theme install $WP_THEME --allow-root \
 						--activate 
-
-	touch $wp_is_setup
 fi
 
 if [ ! -d /run/php/ ]; then

@@ -44,7 +44,7 @@ bash_into:
 			fi
 
 logs:
-			${COMPOSE} logs
+			${COMPOSE} logs -t --since 1m
 
 down:
 			${COMPOSE} down

@@ -13,6 +13,6 @@ RUN		apt-get update -y \
 			-out /etc/nginx/ssl/ssl.crt \
 			-subj "/C=PT/ST=Lisbon/L=Lisbon/O=42Lisboa/OU=Student/CN=dda-cunh.42.fr/UID=dda-cunh"
 
-COPY	./config/nginx.conf	/etc/nginx/nginx.conf	
+COPY	./config/nginx.conf	/etc/nginx/conf.d/nginx.conf
 
 ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
